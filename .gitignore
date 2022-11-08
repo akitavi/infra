@@ -1,0 +1,9 @@
+!infra_storage/.gitkeep
+!app_storage/.gitkeep
+__pycache__/
+*.pyc
+*_.py
+.Trash*/
+*.swp
+app_storage/
+infra_storage/

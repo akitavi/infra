@@ -1,0 +1,68 @@
+version: "3.9"  # optional since v1.27.0
+services:
+  enviapp:
+    image: enviapp:v1 
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - FLASK_APP=main.py
+    ports:
+      - "8000:8000"
+    dns:
+      - 8.8.8.8
+    volumes:
+      - ./app_storage/envi:/envi/envi
+    depends_on:
+      - envidb_test
+    command: python /envi/envi/main.py
+    restart: always
+    networks:
+      container_network:
+        ipv4_address: 172.18.0.3
+
+  enviapp2:
+    image: enviapp:v1 
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - FLASK_APP=main.py
+    ports:
+      - "8001:8000"
+    dns:
+      - 8.8.8.8
+    volumes:
+      - ./app_storage/envi:/envi/envi
+    depends_on:
+      - envidb_test
+    command: python /envi/envi/main.py
+    restart: always
+    networks:
+      container_network:
+        ipv4_address: 172.18.0.6
+  
+  envidb_test:
+    image: mariadb:10.7
+    environment:
+      - MARIADB_DATABASE=envidb
+      - MARIADB_USER=enviapp
+      - MARIADB_PASSWORD=test123
+      - MARIADB_ROOT_PASSWORD=test123
+    restart: always
+    volumes:
+      - ./app_storage/database:/var/lib/mysql
+    networks:
+      container_network:
+        ipv4_address: 172.18.0.4
+
+volumes:
+  envi: {}
+
+networks:
+  container_network:
+    name: container-network
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/24 

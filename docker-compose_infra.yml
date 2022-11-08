@@ -1,0 +1,47 @@
+version: "3.9"  # optional since v1.27.0
+services:
+
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./infra_storage/prometheus:/etc/prometheus
+    restart: always
+    networks:
+      container_network:
+        ipv4_address: 172.18.0.100
+
+  grafana:
+    image: grafana/grafana
+    depends_on:
+      - prometheus
+    restart: always
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./infra_storage/grafana:/var/lib/grafana
+    networks:
+      container_network:
+        ipv4_address: 172.18.0.101
+
+  jenkins:
+    image: jenkins/jenkins:lts
+    restart: always
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - ./infra_storage/jenkins:/var/jenkins_home
+    networks:
+      container_network:
+        ipv4_address: 172.18.0.102
+
+
+volumes:
+  envi: {}
+
+networks:
+  container_network:
+    name: container-network
+    external: true
