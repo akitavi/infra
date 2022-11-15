@@ -1,1 +1,27 @@
-fds
+// stage('Project Checkout Stage') {
+//             steps {
+//                 stepInfo("${PROJECT}/${REPOSITORY}/${BRANCH} Checkout Stage START")
+//                 git url: 'https://scm/${PROJECT}/${REPOSITORY}.git', branch: '${BRANCH}', credentialsId: 'bla'
+//                 stepInfo("${PROJECT}/${REPOSITORY}/${BRANCH} Checkout END")
+//             }
+//         }
+
+
+pipeline {
+	agent any
+	stages {
+		stage('1-build') {
+			steps {
+				echo "start build"
+				echo "build"
+				echo "end build"
+			}
+		}
+		stage('2-test') {
+			steps {
+				echo "start test"
+				echo "stop test"
+			}
+		}
+	}
+}
