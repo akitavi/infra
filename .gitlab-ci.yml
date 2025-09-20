@@ -1,0 +1,17 @@
+stages:
+  - deploy
+
+variables:
+  IMAGE_REPO: akitavi/flask_blog
+
+deploy:
+  stage: deploy
+  image: alpine/helm:3.14.4
+  script:
+    - helm upgrade --install enviapp ./charts/enviapp \
+        --namespace enviapp \
+        --create-namespace \
+        --set image.repository=$IMAGE_REPO \
+        --set image.tag=$IMAGE_TAG
+  only:
+    - main
