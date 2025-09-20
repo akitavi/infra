@@ -1,0 +1,25 @@
+replicaCount: 1
+
+image:
+  repository: registry.gitlab.com/<your_namespace>/enviapp
+  tag: latest
+  pullPolicy: Always
+
+env:
+  ENVI_USER: alex
+  ENVI_DB: envidb
+  ENVI_DB_USER: enviapp
+  ENVI_DB_HOST: postgres.db.svc.cluster.local
+  FLASK_HOME: /envi
+  PROD_URL: https://m-atresh.tech
+  FLASK_APP: main.py
+  FLASK_DEBUG: "False"
+
+secretName: site-secrets
+
+volumes:
+  images: /opt/envi/cold_data/images
+  preview: /opt/envi/hot_data/preview
+  video: /opt/envi/cold_data/video
+  files: /opt/envi/cold_data/files
+  accesslog: /var/log/nginx/access_envi.log

@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: enviapp
+  namespace: envi
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: enviapp
+  template:
+    metadata:
+      labels:
+        app: enviapp
+    spec:
+      containers:
+      - name: enviapp
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - containerPort: 8000
+        command: ["python", "main.py"]
+        env:
+        {{- range $key, $val := .Values.env }}
+        - name: {{ $key }}
+          value: "{{ $val }}"
+        {{- end }}
+        envFrom:
+        - secretRef:
+            name: {{ .Values.secretName }}
+        volumeMounts:
+        - mountPath: /envi/static/images
+          name: images-vol
+        - mountPath: /envi/static/preview
+          name: preview-vol
+        - mountPath: /envi/static/user_video
+          name: video-vol
+        - mountPath: /envi/static/user_files
+          name: files-vol
+        - mountPath: /envi/access.log
+          name: accesslog-vol
+      volumes:
+      - name: images-vol
+        hostPath:
+          path: {{ .Values.volumes.images }}
+          type: Directory
+      - name: preview-vol
+        hostPath:
+          path: {{ .Values.volumes.preview }}
+          type: Directory
+      - name: video-vol
+        hostPath:
+          path: {{ .Values.volumes.video }}
+          type: Directory
+      - name: files-vol
+        hostPath:
+          path: {{ .Values.volumes.files }}
+          type: Directory
+      - name: accesslog-vol
+        hostPath:
+          path: {{ .Values.volumes.accesslog }}
+          type: File
