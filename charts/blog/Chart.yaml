@@ -1,6 +1,11 @@
 apiVersion: v2
 name: enviapp
-description: Helm chart for enviapp
-type: application
 version: 0.1.0
-appVersion: "1.0"
+type: application
+
+dependencies:
+  - name: t-api
+    version: 0.1.0
+    repository: "file://charts/t-api"
+    condition: tApi.enabled
+

@@ -1,25 +1,89 @@
+apiVersion: v2
+name: enviapp
+version: 0.1.0
+type: application
+
+dependencies:
+  - name: t-api
+    version: 0.1.0
+    repository: "file://charts/t-api"
+    condition: tApi.enabled
+root@lenovo-thinkcentre-m79:/opt/k8s/charts/enviapp# cat values.yaml 
 replicaCount: 1
 
 image:
-  repository: registry.gitlab.com/<your_namespace>/enviapp
-  tag: latest
-  pullPolicy: Always
+  repository: akitavi/flask_blog
+  tag: "v5.67"
+  pullPolicy: IfNotPresent
+
+storageClass: "local-path"
+
+persistence:
+  images:
+    enabled: true
+    size: 300Gi
+    storageClass: ""
+  preview:
+    enabled: true
+    size: 10Gi
+    storageClass: ""
+  userVideo:
+    enabled: true
+    size: 300Gi
+    storageClass: ""
+  userFiles:
+    enabled: true
+    size: 20Gi
+    storageClass: ""
+
+
+service:
+  type: ClusterIP   # можно поменять на LoadBalancer для MetalLB
+  port: 8000
+
+accessLog:
+  enabled: true
+  hostPath: /var/log/nginx/access_envi.log
 
 env:
-  ENVI_USER: alex
-  ENVI_DB: envidb
-  ENVI_DB_USER: enviapp
-  ENVI_DB_HOST: postgres.db.svc.cluster.local
-  FLASK_HOME: /envi
-  PROD_URL: https://m-atresh.tech
-  FLASK_APP: main.py
+  ENVI_USER: "alex"
+  ENVI_DB: "envidb"
+  ENVI_DB_USER: "enviapp"
+  ENVI_DB_HOST: "envidb-pg.db.svc.cluster.local"
+  FLASK_HOME: "/envi"
+  PROD_URL: "https://m-atresh.tech"
+  FLASK_APP: "main.py"
   FLASK_DEBUG: "False"
 
-secretName: site-secrets
 
-volumes:
-  images: /opt/envi/cold_data/images
-  preview: /opt/envi/hot_data/preview
-  video: /opt/envi/cold_data/video
-  files: /opt/envi/cold_data/files
-  accesslog: /var/log/nginx/access_envi.log
+secrets:
+  ENVI_DB_PASS: "7be21041A!"
+  ENVI_SECRET_KEY: "7be21041A!"
+
+secretRef: site-secrets
+
+tApi:
+  enabled: true
+
+  image:
+    repository: akitavi/t_api
+    tag: v3.4
+    pullPolicy: IfNotPresent
+
+  # Переменные окружения
+  env:
+    FLASK_DEBUG: "False"
+
+  # Секреты
+  secrets:
+    create: true
+    name: t-api-secrets
+    telegramToken: ""
+    apiUrl: ""
+    serviceUrl: ""
+
+  service:
+    type: ClusterIP
+    port: 5000
+  replicaCount: 1
+

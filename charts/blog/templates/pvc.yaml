@@ -1,0 +1,55 @@
+{{- if .Values.persistence.images.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "enviapp.fullname" . }}-static-images
+  namespace: {{ .Release.Namespace }}
+spec:
+  accessModes: [ "ReadWriteOnce" ]
+  storageClassName: {{ default .Values.storageClass .Values.persistence.images.storageClass | quote }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.images.size }}
+{{- end }}
+---
+{{- if .Values.persistence.preview.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "enviapp.fullname" . }}-static-preview
+  namespace: {{ .Release.Namespace }}
+spec:
+  accessModes: [ "ReadWriteOnce" ]
+  storageClassName: {{ default .Values.storageClass .Values.persistence.preview.storageClass | quote }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.preview.size }}
+{{- end }}
+---
+{{- if .Values.persistence.userVideo.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "enviapp.fullname" . }}-static-user-video
+  namespace: {{ .Release.Namespace }}
+spec:
+  accessModes: [ "ReadWriteOnce" ]
+  storageClassName: {{ default .Values.storageClass .Values.persistence.userVideo.storageClass | quote }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.userVideo.size }}
+{{- end }}
+---
+{{- if .Values.persistence.userFiles.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "enviapp.fullname" . }}-static-user-files
+  namespace: {{ .Release.Namespace }}
+spec:
+  accessModes: [ "ReadWriteOnce" ]
+  storageClassName: {{ default .Values.storageClass .Values.persistence.userFiles.storageClass | quote }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.userFiles.size }}
+{{- end }}
