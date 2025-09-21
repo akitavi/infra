@@ -19,5 +19,9 @@ deploy:
         --create-namespace \
         --set image.repository="$IMAGE_REPO" \
         --set image.tag="${IMAGE_TAG:-latest}"
+  trigger:
+    project: apps/blog
+    branch: main
+
   only:
     - main
