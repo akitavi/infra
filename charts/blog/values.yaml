@@ -2,22 +2,16 @@ replicaCount: 1
 
 image:
   repository: akitavi/flask_blog
-  tag: "v5.67"
+  tag: "latest"
   pullPolicy: IfNotPresent
-
-storageClass: "manual"
 
 persistence:
   enabled: true
-  existingClaim: enviapp-static
+  existingClaim: enviapp-static   # уже создан руками PVC
 
 service:
-  type: ClusterIP   # можно поменять на LoadBalancer для MetalLB
+  type: ClusterIP
   port: 8000
-
-accessLog:
-  enabled: true
-  hostPath: /var/log/nginx/access_envi.log
 
 env:
   ENVI_USER: "alex"
@@ -29,35 +23,8 @@ env:
   FLASK_APP: "main.py"
   FLASK_DEBUG: "False"
 
-
-secrets:
-  ENVI_DB_PASS: "7be21041A!"
-  ENVI_SECRET_KEY: "7be21041A!"
-
 secretRef: site-secrets
 
-tApi:
+accessLog:
   enabled: true
-
-  image:
-    repository: akitavi/t_api
-    tag: v3.4
-    pullPolicy: IfNotPresent
-
-  # Переменные окружения
-  env:
-    FLASK_DEBUG: "False"
-
-  # Секреты
-  secrets:
-    create: true
-    name: t-api-secrets
-    telegramToken: ""
-    apiUrl: ""
-    serviceUrl: ""
-
-  service:
-    type: ClusterIP
-    port: 5000
-  replicaCount: 1
-
+  hostPath: /var/log/nginx/access_envi.log

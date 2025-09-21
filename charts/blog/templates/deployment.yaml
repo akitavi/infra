@@ -23,16 +23,16 @@ spec:
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
-        - containerPort: 8000
+          - containerPort: 8000
         command: ["python", "main.py"]
         env:
         {{- range $key, $value := .Values.env }}
-        - name: {{ $key }}
-          value: "{{ $value }}"
+          - name: {{ $key }}
+            value: "{{ $value }}"
         {{- end }}
         envFrom:
-        - secretRef:
-            name: {{ .Values.secretRef }}
+          - secretRef:
+              name: {{ .Values.secretRef }}
         volumeMounts:
           - name: static-data
             mountPath: /envi/static/images
@@ -46,21 +46,17 @@ spec:
           - name: static-data
             mountPath: /envi/static/user_files
             subPath: user_files
-
           {{- if .Values.accessLog.enabled }}
           - mountPath: /envi/access.log
             name: accesslog-vol
           {{- end }}
-        volumes:
-          - name: static-data
-            persistentVolumeClaim:
-              claimName: {{ include "enviapp.fullname" . }}-static
-  
-
+      volumes:
+        - name: static-data
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.existingClaim }}
         {{- if .Values.accessLog.enabled }}
         - name: accesslog-vol
           hostPath:
             path: {{ .Values.accessLog.hostPath }}
             type: File
         {{- end }}
-
