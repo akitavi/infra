@@ -1,14 +1,3 @@
-apiVersion: v2
-name: enviapp
-version: 0.1.0
-type: application
-
-dependencies:
-  - name: t-api
-    version: 0.1.0
-    repository: "file://charts/t-api"
-    condition: tApi.enabled
-root@lenovo-thinkcentre-m79:/opt/k8s/charts/enviapp# cat values.yaml 
 replicaCount: 1
 
 image:
