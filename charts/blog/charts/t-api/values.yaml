@@ -1,0 +1,27 @@
+image:
+  repository: akitavi/t_api
+  tag: v3.4
+  pullPolicy: IfNotPresent
+
+env:
+  FLASK_DEBUG: "False"
+
+secrets:
+  create: true
+  name: t-api-secrets
+  telegramToken: "5055745334:AAEkV4xJwTqulbNhqeUC9n7qY9QDNrFwKGo"
+  apiUrl: "https://m-atresh.tech/api"
+  serviceUrl: "https://m-atresh.tech"
+
+service:
+  type: ClusterIP
+  port: 5000
+
+replicaCount: 1
+
+resources: {}
+podAnnotations: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}
+

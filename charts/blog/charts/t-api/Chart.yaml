@@ -1,0 +1,7 @@
+apiVersion: v2
+name: t-api
+description: Telegram API bot subchart for enviapp
+type: application
+version: 0.1.0
+appVersion: "v3.4"
+

@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "t-api.fullname" . }}
+  labels:
+    {{- include "t-api.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "t-api.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "t-api.selectorLabels" . | nindent 8 }}
+      annotations:
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      containers:
+        - name: t-api
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["python", "/t_api/telegram.py"]
+          ports:
+            - name: http
+              containerPort: 5000
+          env:
+            - name: FLASK_DEBUG
+              value: "{{ .Values.env.FLASK_DEBUG }}"
+            - name: TELEGRAM_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "t-api.secretName" . }}
+                  key: telegram_token
+            - name: API_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "t-api.secretName" . }}
+                  key: api_url
+            - name: SERVICE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "t-api.secretName" . }}
+                  key: service_url
+          readinessProbe:
+            tcpSocket:
+              port: 5000
+            initialDelaySeconds: 3
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: 5000
+            initialDelaySeconds: 10
+            periodSeconds: 20
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      nodeSelector:
+        {{- toYaml .Values.nodeSelector | nindent 8 }}
+      tolerations:
+        {{- toYaml .Values.tolerations | nindent 8 }}
+      affinity:
+        {{- toYaml .Values.affinity | nindent 8 }}
+
