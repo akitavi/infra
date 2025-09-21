@@ -12,9 +12,9 @@ deploy:
     - |
       set -euo pipefail
       # убедимся, что чарт на месте (полезно, если это сабмодуль)
-      test -f ./charts/enviapp/Chart.yaml || { echo "Chart not found at ./charts/enviapp"; exit 1; }
+      test -f ./charts/blog/Chart.yaml || { echo "Chart not found at ./charts/enviapp"; exit 1; }
 
-      helm upgrade --install enviapp ./charts/enviapp \
+      helm upgrade --install enviapp ./charts/blog \
         --namespace enviapp \
         --create-namespace \
         --set image.repository="$IMAGE_REPO" \
