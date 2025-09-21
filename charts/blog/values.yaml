@@ -5,26 +5,11 @@ image:
   tag: "v5.67"
   pullPolicy: IfNotPresent
 
-storageClass: "local-path"
+storageClass: "manual"
 
 persistence:
-  images:
-    enabled: true
-    size: 300Gi
-    storageClass: ""
-  preview:
-    enabled: true
-    size: 10Gi
-    storageClass: ""
-  userVideo:
-    enabled: true
-    size: 300Gi
-    storageClass: ""
-  userFiles:
-    enabled: true
-    size: 20Gi
-    storageClass: ""
-
+  enabled: true
+  existingClaim: enviapp-static
 
 service:
   type: ClusterIP   # можно поменять на LoadBalancer для MetalLB

@@ -34,33 +34,28 @@ spec:
         - secretRef:
             name: {{ .Values.secretRef }}
         volumeMounts:
-          # Монтируем только нужные подкаталоги — остальное останется из образа
-          - name: static-images
+          - name: static-data
             mountPath: /envi/static/images
-          - name: static-preview
+            subPath: images
+          - name: static-data
             mountPath: /envi/static/preview
-          - name: static-user-video
+            subPath: preview
+          - name: static-data
             mountPath: /envi/static/user_video
-          - name: static-user-files
+            subPath: user_video
+          - name: static-data
             mountPath: /envi/static/user_files
+            subPath: user_files
 
           {{- if .Values.accessLog.enabled }}
           - mountPath: /envi/access.log
             name: accesslog-vol
           {{- end }}
-      volumes:
-        - name: static-images
-          persistentVolumeClaim:
-            claimName: {{ include "enviapp.fullname" . }}-static-images
-        - name: static-preview
-          persistentVolumeClaim:
-            claimName: {{ include "enviapp.fullname" . }}-static-preview
-        - name: static-user-video
-          persistentVolumeClaim:
-            claimName: {{ include "enviapp.fullname" . }}-static-user-video
-        - name: static-user-files
-          persistentVolumeClaim:
-            claimName: {{ include "enviapp.fullname" . }}-static-user-files
+        volumes:
+          - name: static-data
+            persistentVolumeClaim:
+              claimName: {{ include "enviapp.fullname" . }}-static
+  
 
         {{- if .Values.accessLog.enabled }}
         - name: accesslog-vol
