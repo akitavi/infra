@@ -8,10 +8,10 @@ deploy:
   stage: deploy
   image: alpine/helm:3.14.4
   script:
-    - helm upgrade --install enviapp ./charts/enviapp \
-        --namespace enviapp \
-        --create-namespace \
-        --set image.repository=$IMAGE_REPO \
-        --set image.tag=$IMAGE_TAG
+  - helm upgrade --install enviapp ./charts/enviapp \
+      --namespace enviapp \
+      --create-namespace \
+      --set image.repository=$IMAGE_REPO \
+      --set image.tag=$IMAGE_TAG
   only:
     - main
