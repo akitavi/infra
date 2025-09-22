@@ -16,11 +16,6 @@ deploy:
       set -euo pipefail
       echo "Deploying $IMAGE_REPO:$IMAGE_TAG ..."
       test -f ./charts/blog/Chart.yaml || { echo "Chart not found at ./charts/blog"; exit 1; }
-
-      helm upgrade --install enviapp ./charts/blog \
-        --namespace enviapp \
-        --create-namespace \
-        --set image.repository="$IMAGE_REPO" \
-        --set image.tag="$IMAGE_TAG"
+      helm upgrade --install enviapp ./charts/blog --namespace enviapp --create-namespace --set image.repository="$IMAGE_REPO" --set image.tag="$IMAGE_TAG"
   only:
     - main
