@@ -2,26 +2,25 @@ stages:
   - deploy
 
 variables:
-  IMAGE_REPO: akitavi/flask_blog
+  IMAGE_REPO: docker.io/akitavi/flask_blog
   IMAGE_TAG: ${IMAGE_TAG:-latest}
 
 deploy:
   stage: deploy
   image: alpine/helm:3.14.4
+  before_script:
+    - mkdir -p ~/.kube
+    - echo "$KUBECONFIG" > ~/.kube/config
   script:
     - |
       set -euo pipefail
-      # убедимся, что чарт на месте (полезно, если это сабмодуль)
-      test -f ./charts/blog/Chart.yaml || { echo "Chart not found at ./charts/enviapp"; exit 1; }
+      echo "Deploying $IMAGE_REPO:$IMAGE_TAG ..."
+      test -f ./charts/blog/Chart.yaml || { echo "Chart not found at ./charts/blog"; exit 1; }
 
       helm upgrade --install enviapp ./charts/blog \
         --namespace enviapp \
         --create-namespace \
         --set image.repository="$IMAGE_REPO" \
-        --set image.tag="${IMAGE_TAG:-latest}"
-  trigger:
-    project: apps/blog
-    branch: main
-
+        --set image.tag="$IMAGE_TAG"
   only:
     - main
