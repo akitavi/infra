@@ -13,7 +13,4 @@ deploy:
     - mkdir -p $CI_PROJECT_DIR/.kube
     - echo "$KUBECONFIG_FILE" | base64 -d > $KUBECONFIG
   script:
-    - helm upgrade --install enviapp ./charts/enviapp \
-        --namespace enviapp \
-        --set image.repository=$IMAGE_REPO \
-        --set image.tag=$IMAGE_TAG
+    - helm upgrade --install enviapp ./charts/enviapp --namespace enviapp --set image.repository=$IMAGE_REPO --set image.tag=$IMAGE_TAG
