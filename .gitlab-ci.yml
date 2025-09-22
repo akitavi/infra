@@ -2,20 +2,18 @@ stages:
   - deploy
 
 variables:
+  KUBECONFIG: "$CI_PROJECT_DIR/.kube/config"
   IMAGE_REPO: docker.io/akitavi/flask_blog
-  IMAGE_TAG: ${IMAGE_TAG:-latest}
+  IMAGE_TAG: ${CI_COMMIT_SHORT_SHA:-latest}
 
 deploy:
   stage: deploy
-  image: alpine/helm:3.14.4
+  image: alpine/helm:3.15.2
   before_script:
-    - mkdir -p ~/.kube
-    - echo "$KUBECONFIG" > ~/.kube/config
+    - mkdir -p $CI_PROJECT_DIR/.kube
+    - echo "$KUBECONFIG_FILE" | base64 -d > $KUBECONFIG
   script:
-    - |
-      set -euo pipefail
-      echo "Deploying $IMAGE_REPO:$IMAGE_TAG ..."
-      test -f ./charts/blog/Chart.yaml || { echo "Chart not found at ./charts/blog"; exit 1; }
-      helm upgrade --install enviapp ./charts/blog --namespace enviapp --create-namespace --set image.repository="$IMAGE_REPO" --set image.tag="$IMAGE_TAG"
-  only:
-    - main
+    - helm upgrade --install enviapp ./charts/enviapp \
+        --namespace enviapp \
+        --set image.repository=$IMAGE_REPO \
+        --set image.tag=$IMAGE_TAG
