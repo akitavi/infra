@@ -23,10 +23,6 @@ env:
   FLASK_APP: "main.py"
   FLASK_DEBUG: "False"
 
-secrets:
-  ENVI_DB_PASS: "7be21041A!"
-  ENVI_SECRET_KEY: "7be21041A!"
-
 
 secretRef: site-secrets
 

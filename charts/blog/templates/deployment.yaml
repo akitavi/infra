@@ -26,10 +26,7 @@ spec:
           - containerPort: 8000
         command: ["python", "main.py"]
         env:
-        {{- range $key, $value := .Values.env }}
-          - name: {{ $key }}
-            value: "{{ $value }}"
-        {{- end }}
+          {{- toYaml .Values.env | nindent 4 }}
         envFrom:
           - secretRef:
               name: {{ .Values.secretRef }}
