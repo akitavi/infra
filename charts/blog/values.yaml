@@ -14,15 +14,22 @@ service:
   port: 8000
 
 env:
-  ENVI_USER: "alex"
-  ENVI_DB: "envidb"
-  ENVI_DB_USER: "enviapp"
-  ENVI_DB_HOST: "envidb-pg.db.svc.cluster.local"
-  FLASK_HOME: "/envi"
-  PROD_URL: "https://m-atresh.tech"
-  FLASK_APP: "main.py"
-  FLASK_DEBUG: "False"
-
+  - name: ENVI_USER
+    value: "alex"
+  - name: ENVI_DB
+    value: "envidb"
+  - name: ENVI_DB_USER
+    value: "enviapp"
+  - name: ENVI_DB_HOST
+    value: "envidb-pg.db.svc.cluster.local"
+  - name: FLASK_HOME
+    value: "/envi"
+  - name: PROD_URL
+    value: "https://m-atresh.tech"
+  - name: FLASK_APP
+    value: "main.py"
+  - name: FLASK_DEBUG
+    value: "False"
 
 secretRef: site-secrets
 

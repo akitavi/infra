@@ -26,7 +26,7 @@ spec:
           - containerPort: 8000
         command: ["python", "main.py"]
         env:
-          {{- toYaml .Values.env | nindent 4 }}
+        {{- toYaml .Values.env | nindent 4 }}
         envFrom:
           - secretRef:
               name: {{ .Values.secretRef }}
