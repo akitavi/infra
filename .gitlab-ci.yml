@@ -4,7 +4,7 @@ stages:
 variables:
   KUBECONFIG: "$CI_PROJECT_DIR/.kube/config"
   IMAGE_REPO: docker.io/akitavi/flask_blog
-  IMAGE_TAG: ${CI_COMMIT_SHORT_SHA:-latest}
+  IMAGE_TAG: "latest"
 
 deploy:
   stage: deploy
