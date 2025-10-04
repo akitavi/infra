@@ -3,25 +3,13 @@ image:
   tag: v3.4
   pullPolicy: IfNotPresent
 
+replicaCount: 1
 env:
   FLASK_DEBUG: "False"
 
-secrets:
-  create: true
-  name: t-api-secrets
-  telegramToken: "5055745334:AAEkV4xJwTqulbNhqeUC9n7qY9QDNrFwKGo"
-  apiUrl: "https://m-atresh.tech/api"
-  serviceUrl: "https://m-atresh.tech"
+secretRef: t-api-secrets
 
 service:
   type: ClusterIP
   port: 5000
-
-replicaCount: 1
-
-resources: {}
-podAnnotations: {}
-nodeSelector: {}
-tolerations: []
-affinity: {}
 

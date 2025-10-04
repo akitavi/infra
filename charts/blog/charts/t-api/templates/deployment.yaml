@@ -1,22 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "t-api.fullname" . }}
-  labels:
-    {{- include "t-api.labels" . | nindent 4 }}
-spec:
+  name: t-api
+sec:
   replicas: {{ .Values.replicaCount }}
-  selector:
-    matchLabels:
-      {{- include "t-api.selectorLabels" . | nindent 6 }}
   template:
-    metadata:
-      labels:
-        {{- include "t-api.selectorLabels" . | nindent 8 }}
-      annotations:
-        {{- with .Values.podAnnotations }}
-        {{- toYaml . | nindent 8 }}
-        {{- end }}
     spec:
       containers:
         - name: t-api
@@ -54,8 +42,3 @@ spec:
               port: 5000
             initialDelaySeconds: 10
             periodSeconds: 20
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-      nodeSelector:
-        {{- toYaml .Values.nodeSelector | nindent 8 }}
-
